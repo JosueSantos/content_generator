@@ -1,4 +1,4 @@
 # Dependency directories
-content/
+content/*
 *.pyc
 __pycache__

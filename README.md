@@ -21,6 +21,8 @@
 
 * instale o python e a biblioteca scrapy
 * pip install scrapy
+* pip install requests
+* pip install unidecode
 
 
 Os comandos abaixo podem ser executados:
