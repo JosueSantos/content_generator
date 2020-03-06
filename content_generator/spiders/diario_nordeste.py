@@ -91,7 +91,6 @@ class DiarioNordesteSpider(scrapy.Spider):
 
 		conteudo = str( response.css("div.c-article-content").extract_first() )
 		conteudo = re.sub(pattern, ' ', conteudo).replace("  ", "")
-		print(conteudo)
 
 		image_url = response.css("div.c-article__photo-featured figure div div meta[itemprop='url']::attr(content)").extract_first()
 		if ( image_url == None ):

@@ -25,3 +25,19 @@ class MateriaItem(scrapy.Item):
 	autor = scrapy.Field()
 	sub_titulo = scrapy.Field()
 	conteudo = scrapy.Field()
+
+
+class MateriaBackupItem(scrapy.Item):
+	link = scrapy.Field()
+	editoria = scrapy.Field()
+	titulo = scrapy.Field()
+	sub_titulo = scrapy.Field()
+	autor = scrapy.Field()
+	time = scrapy.Field()
+	date = scrapy.Field()
+	link_rel = scrapy.Field()
+	link_rel_interno = scrapy.Field()
+	id_dn = scrapy.Field()
+	tags = scrapy.Field()
+	conteudoHtml = scrapy.Field()
+	conteudo = scrapy.Field()

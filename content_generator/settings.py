@@ -14,4 +14,5 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'content_generator.pipelines.ContentFile': 300,
+    'content_generator.pipelines.SpiderWebCSV': 500,
 }
