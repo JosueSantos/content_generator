@@ -9,21 +9,17 @@ class DiarioBackupSpider(scrapy.Spider):
 	name = 'diario-backup'
 	allowed_domains = ['diariodonordeste.verdesmares.com.br']
 	start_urls = ['https://diariodonordeste.verdesmares.com.br']
-	index = 1
+	index = 0
+
+	def __init__(self, *args, **kwargs):
+		for i in range(2555111):
+			url = 'https://diariodonordeste.verdesmares.com.br/servicos/-1.' + str(i)
+			self.start_urls.append(url)
+
+		self.logger.info("self.start_urls update")
+		super(DiarioBackupSpider, self).__init__(*args, **kwargs)
 
 	def parse(self, response):
-		loop = True
-
-		while loop:
-			self.index = self.index + 1
-			link = 'https://diariodonordeste.verdesmares.com.br/servicos/-1.' + str(self.index)
-
-			if self.index > 2555111:
-				loop = False
-
-			yield response.follow(link, self.parseMateria)
-
-	def parseMateria(self, response):
 		page_article = response.css("article.c-article").extract_first()
 
 		if page_article is not None:
@@ -61,7 +57,16 @@ class DiarioBackupSpider(scrapy.Spider):
 
 			id_dn = link.split('-1.')[-1]
 			date = time.split('/')[1].strip()
+			
 			time = time[0:5]
+
+			dateCreated = response.css("time.c-article__date-created::attr(datetime)").extract_first()
+			if dateCreated is not None:
+				dateCreated = re.sub(pattern, ' ', dateCreated).strip()
+
+			datePublished = response.css("time.c-article__date-published::attr(datetime)").extract_first()
+			if datePublished is not None:
+				datePublished = re.sub(pattern, ' ', datePublished).strip()
 
 			conteudoHtml = str( response.css("div.c-article-content").extract_first() )
 			conteudoHtml = re.sub(pattern, ' ', conteudoHtml).replace("  ", "").encode().decode('utf-8')
@@ -81,6 +86,8 @@ class DiarioBackupSpider(scrapy.Spider):
 				autor=autor,
 				time=time,
 				date=date,
+				dateCreated=dateCreated,
+				datePublished=datePublished,
 				link_rel=len(link_rel),
 				link_rel_interno=len(link_rel_interno),
 				id_dn=id_dn,

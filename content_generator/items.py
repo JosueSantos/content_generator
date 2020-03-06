@@ -35,6 +35,8 @@ class MateriaBackupItem(scrapy.Item):
 	autor = scrapy.Field()
 	time = scrapy.Field()
 	date = scrapy.Field()
+	dateCreated = scrapy.Field()
+	datePublished = scrapy.Field()
 	link_rel = scrapy.Field()
 	link_rel_interno = scrapy.Field()
 	id_dn = scrapy.Field()

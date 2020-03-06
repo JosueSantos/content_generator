@@ -1,4 +1,6 @@
 # Dependency directories
-content/*
 *.pyc
-__pycache__
+/__pycache__
+/content
+/content_generator/__pycache__
+/content_generator/spiders/__pycache__
