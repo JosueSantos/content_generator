@@ -4,3 +4,5 @@
 /content
 /content_generator/__pycache__
 /content_generator/spiders/__pycache__
+/dados.csv
+/*.csv
