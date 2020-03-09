@@ -5,6 +5,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
+import pymongo
+
 from scrapy.exporters import CsvItemExporter
 
 from content_generator.items import MateriaItem
@@ -125,3 +127,31 @@ class SpiderWebCSV(object):
 	def close_spider(self, spider):
 		self.exporter.finish_exporting()
 		self.file.close()
+
+class SpiderWebMongo(object):
+	def __init__(self):
+		connection = pymongo.MongoClient(
+			host="localhost",
+			port=27017
+		)
+		self.db = connection.dn_backup
+		self.collection = self.db.spider
+
+	def process_item(self, item, spider):
+		valid = True
+		for data in item:
+			if not data:
+				valid = False
+				raise DropItem("Missing {0}!".format(data))
+
+		if valid:
+			if isinstance(item, MateriaBackupItem):
+				self.collection = self.db.materia_dn
+				self.collection.update(
+					{
+						'id_dn': item['id_dn']
+					},
+					{"$set":dict(item)}, True
+				)
+
+		return item

@@ -23,6 +23,7 @@
 * pip install scrapy
 * pip install requests
 * pip install unidecode
+* pip install pymongo
 
 
 Os comandos abaixo podem ser executados:

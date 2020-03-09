@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
+import datetime
 
 from content_generator.items import MateriaBackupItem
 
@@ -63,10 +64,12 @@ class DiarioBackupSpider(scrapy.Spider):
 			dateCreated = response.css("time.c-article__date-created::attr(datetime)").extract_first()
 			if dateCreated is not None:
 				dateCreated = re.sub(pattern, ' ', dateCreated).strip()
+				dateCreated = datetime.datetime.strptime(dateCreated, "%Y-%m-%d %H:%M:%S")
 
 			datePublished = response.css("time.c-article__date-published::attr(datetime)").extract_first()
 			if datePublished is not None:
 				datePublished = re.sub(pattern, ' ', datePublished).strip()
+				datePublished = datetime.datetime.strptime(datePublished, "%Y-%m-%d %H:%M:%S")
 
 			conteudoHtml = str( response.css("div.c-article-content").extract_first() )
 			conteudoHtml = re.sub(pattern, ' ', conteudoHtml).replace("  ", "").encode().decode('utf-8')
@@ -90,7 +93,7 @@ class DiarioBackupSpider(scrapy.Spider):
 				datePublished=datePublished,
 				link_rel=len(link_rel),
 				link_rel_interno=len(link_rel_interno),
-				id_dn=id_dn,
+				id_dn=int(id_dn),
 				tags=tags,
 				conteudoHtml=conteudoHtml,
 				conteudo=conteudo,
