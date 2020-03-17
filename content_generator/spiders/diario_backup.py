@@ -2,25 +2,38 @@
 import scrapy
 import re
 import datetime
+import pymongo
+import logging
 
 from content_generator.items import MateriaBackupItem
-
 
 class DiarioBackupSpider(scrapy.Spider):
 	name = 'diario-backup'
 	allowed_domains = ['diariodonordeste.verdesmares.com.br']
-	start_urls = ['https://diariodonordeste.verdesmares.com.br']
+	start_urls = ['https://diariodonordeste.verdesmares.com.br/']
 	index = 0
 
 	def __init__(self, *args, **kwargs):
-		for i in range(2555111):
+		logger = logging.getLogger("mylogger")
+
+		connection = pymongo.MongoClient(
+			host="localhost",
+			port=27017
+		)
+		db = connection.dn_backup
+		materia_dn = db.materia_dn
+
+		for i in range(2222222, 2253180):
 			url = 'https://diariodonordeste.verdesmares.com.br/servicos/-1.' + str(i)
+			logger.warning(url)
 			self.start_urls.append(url)
 
 		self.logger.info("self.start_urls update")
 		super(DiarioBackupSpider, self).__init__(*args, **kwargs)
 
 	def parse(self, response):
+		logger = logging.getLogger("mylogger")
+
 		page_article = response.css("article.c-article").extract_first()
 
 		if page_article is not None:
@@ -81,6 +94,7 @@ class DiarioBackupSpider(scrapy.Spider):
 			conteudo = ' '.join(conteudo)
 			conteudo = re.sub(pattern, ' ', conteudo).replace("  ", " ").encode().decode('utf-8')
 
+
 			materia = MateriaBackupItem(
 				link=link,
 				editoria=editoria,
@@ -98,5 +112,7 @@ class DiarioBackupSpider(scrapy.Spider):
 				conteudoHtml=conteudoHtml,
 				conteudo=conteudo,
 			)
+			
+			logger.warning(materia)
 
 			yield materia

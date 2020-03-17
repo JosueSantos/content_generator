@@ -30,3 +30,5 @@ ano_materia = materia_dn.aggregate([
 for item in ano_materia:
 	if item['_id']['ano_materia'] > 1100:
 		print( str(item['_id']['ano_materia']) + ' - ' + str(item['count']))
+
+print('--------------------------- Total de materias - ' + str(materia_dn.count_documents({})))

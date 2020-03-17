@@ -147,11 +147,12 @@ class SpiderWebMongo(object):
 		if valid:
 			if isinstance(item, MateriaBackupItem):
 				self.collection = self.db.materia_dn
-				self.collection.update(
-					{
-						'id_dn': item['id_dn']
-					},
-					{"$set":dict(item)}, True
-				)
+				if self.collection.count_documents({"id_dn":item['id_dn']}) == 0:
+					self.collection.update(
+						{
+							'id_dn': item['id_dn']
+						},
+						{"$set":dict(item)}, upsert=True
+					)
 
 		return item

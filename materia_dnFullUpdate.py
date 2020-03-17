@@ -1,5 +1,6 @@
 import pymongo
 import datetime
+from bson import ObjectId
 
 connection = pymongo.MongoClient(
 	host="localhost",
@@ -29,11 +30,9 @@ for materia in materia_dn.find(no_cursor_timeout=True):
 
 		materia_dn.update_one(
 			{
-				'id_dn': materia['id_dn']
+				"_id": ObjectId(materia['_id'])
 			},
 			{"$set":data}, True
 		)
 
 	print("DN " + str(materia['id_dn']))
-
-materia_dn.close()
